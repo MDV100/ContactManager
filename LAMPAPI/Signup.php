@@ -7,7 +7,7 @@
 
     $inData = getRequestInfo();
 
-    $conn = new mysqli("localhost", "vogt", "password", "COP4331");
+    $conn = new mysqli("localhost", "vogt", "password", "ContactManager");
 
     if( $conn->connect_error )
     {

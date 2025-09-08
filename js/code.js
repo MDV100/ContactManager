@@ -5,6 +5,52 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+async function validateAndRegister() {
+    const fields = [
+        'registerName',
+        'registerEmail',
+        'registerPhone',
+        'registerPassword'
+    ];
+    let allFilled = true;
+
+    fields.forEach(id => {
+        const input = document.getElementById(id);
+        if (!input.value.trim()) {
+            input.classList.add('input-error');
+            allFilled = false;
+        } else {
+            input.classList.remove('input-error');
+        }
+    });
+
+    if (!allFilled) return;
+
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const phone = document.getElementById('registerPhone').value.trim();
+    const password = document.getElementById('registerPassword').value.trim();
+    const creationDate = new Date().toISOString();
+
+    const userData = { name, email, phone, password, creationDate };
+    const jsonPayload = JSON.stringify(userData);
+
+    const url = urlBase + '/Register.' + extension;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonPayload
+        });
+
+        if (response.ok) {
+            window.location.href = 'login.html';
+        }
+    } catch (err) {
+    }
+}
+
 function doLogin()
 {
 	userId = 0;

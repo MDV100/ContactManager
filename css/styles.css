@@ -1,6 +1,6 @@
 body 
 {
-    background-color: #707070;
+    background-color: #1630b0;
 }
 
 #title 
@@ -137,4 +137,8 @@ select{
     margin-bottom: 1%;
     font-family: 'Ubuntu', sans-serif;
     color: #95060a;
+}
+
+.input-error {
+    border: 2px solid red;
 }

@@ -5,6 +5,26 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+function validateLoginFields() {
+    let valid = true;
+    const nameInput = document.getElementById('loginName');
+    const passInput = document.getElementById('loginPassword');
+
+    // Remove previous error styling
+    nameInput.classList.remove('input-error');
+    passInput.classList.remove('input-error');
+
+    if (!nameInput.value.trim()) {
+        nameInput.classList.add('input-error');
+        valid = false;
+    }
+    if (!passInput.value.trim()) {
+        passInput.classList.add('input-error');
+        valid = false;
+    }
+    return valid;
+}
+
 async function validateAndRegister() {
     const fields = [
         'registerName',

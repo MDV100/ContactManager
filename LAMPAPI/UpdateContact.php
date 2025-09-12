@@ -6,6 +6,7 @@
 	$phone     = $inData["phone"];
 	$email     = $inData["email"];
 	$userId    = $inData["userId"];
+    $contactID = $inData["ID"];
 
 	$conn = new mysqli("localhost", "vogt", "password", "ContactManager");
 	if ($conn->connect_error) 
@@ -14,8 +15,8 @@
 	} 
 	else
 	{
-    	$stmt = $conn->prepare("INSERT INTO Contacts (UserID, FirstName, LastName, Phone, Email) VALUES (?, ?, ?, ?, ?)");
-		$stmt->bind_param("sssss", $userId, $firstName, $lastName, $phone, $email);
+    	$stmt = $conn->prepare("UPDATE Contacts SET UserID=?, FirstName=?, LastName=?, Phone=?, Email=? WHERE ID=?;");
+		$stmt->bind_param("ssssss", $userId, $firstName, $lastName, $phone, $email, $contactID);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();

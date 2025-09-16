@@ -7,20 +7,6 @@
 </head>
 <body>
 
-<h1 id="title">Create your account</h1>
-
-<div id="loginDiv">
-	<input type="text" id="registerName" placeholder="Full Name" /><br />
-	<input type="text" id="registerEmail" placeholder="Email" /><br />
-	<input type="text" id="registerPhone" placeholder="Phone" /><br />
-	<input type="password" id="registerPassword" placeholder="Password" /><br />
-	<button type="button" id="registerButton" class="buttons" onclick="validateAndRegister();"> Register </button>
-	<div id="registerResult" class="alert" style="display:none;"></div>
-	<div style="text-align:center;margin-top:10px;">
-		<a href="index.html">Back to Login</a>
-	</div>
-</div>
-
 </body>
 </html>
 <!DOCTYPE html>
@@ -36,11 +22,15 @@
         <div id="registerForm">
             <span id="inner-title">Register</span>
             <input type="text" id="login" placeholder="Username">
-            <input type="text" id="password" placeholder="Password">
+            <input type="password" id="password" placeholder="Password">
             <input type="text" id="firstName" placeholder="First Name">
-            <input type="password" id="lastName" placeholder="Last Name">
+            <input type="text" id="lastName" placeholder="Last Name">
             <button class="buttons" id="submitRegister" onclick="validateAndRegister()">Submit</button>
         </div>
+        <div style="text-align:center;margin-top:10px;">
+            <a href="index.html">Back to Login</a>
+        </div>
+        
     </div>
     <script src="js/code.js"></script>
 </body>

@@ -24,6 +24,7 @@
         if( $result->num_rows > 0 )
         {
             // Username already taken
+			$conn->close();
             returnWithError("User already exists");
         }
         else

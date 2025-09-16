@@ -10,7 +10,6 @@ function validateLoginFields() {
     const nameInput = document.getElementById('loginName');
     const passInput = document.getElementById('loginPassword');
 
-    // Remove previous error styling
     nameInput.classList.remove('input-error');
     passInput.classList.remove('input-error');
 
@@ -29,7 +28,7 @@ async function validateAndRegister() {
     const fields = [
         'registerName',
         'registerEmail',
-        'registerPhone',
+        'registerUsername',
         'registerPassword'
     ];
     let allFilled = true;
@@ -48,11 +47,11 @@ async function validateAndRegister() {
 
     const name = document.getElementById('registerName').value.trim();
     const email = document.getElementById('registerEmail').value.trim();
-    const phone = document.getElementById('registerPhone').value.trim();
+    const phone = document.getElementById('registerUsername').value.trim();
     const password = document.getElementById('registerPassword').value.trim();
     const creationDate = new Date().toISOString();
 
-    const userData = { name, email, phone, password, creationDate };
+    const userData = { name, email, username, password};
     const jsonPayload = JSON.stringify(userData);
 
     const url = urlBase + '/Register.' + extension;

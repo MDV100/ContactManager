@@ -26,8 +26,42 @@
 <div id="accessUIDiv">
 	<input type="text" id="contactSearch" placeholder="Search contacts by name, email, phone" />
 	<button type="button" id="searchBtn" class="buttons" onclick="triggerContactsSearch();"> Search </button>
+	<button type="button" id="addContactBtn" class="buttons" onclick="showAddContactModal();"> Add Contact </button>
 	<div id="contactsStatus" class="alert" style="display:none;"></div>
 	<div id="contactsList" style="padding: 15px;"></div>
+</div>
+
+<!-- Add Contact Modal -->
+<div id="addContactModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000;">
+	<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:30px; border-radius:10px; min-width:400px;">
+		<h3>Add New Contact</h3>
+		<input type="text" id="addFirstName" placeholder="First Name" style="width:100%; margin:5px 0; padding:8px;" />
+		<input type="text" id="addLastName" placeholder="Last Name" style="width:100%; margin:5px 0; padding:8px;" />
+		<input type="text" id="addEmail" placeholder="Email" style="width:100%; margin:5px 0; padding:8px;" />
+		<input type="text" id="addPhone" placeholder="Phone" style="width:100%; margin:5px 0; padding:8px;" />
+		<div style="margin-top:15px;">
+			<button onclick="addContact()" style="margin-right:10px;">Add</button>
+			<button onclick="hideAddContactModal()">Cancel</button>
+		</div>
+		<div id="addContactStatus" style="margin-top:10px;"></div>
+	</div>
+</div>
+
+<!-- Edit Contact Modal -->
+<div id="editContactModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000;">
+	<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:30px; border-radius:10px; min-width:400px;">
+		<h3>Edit Contact</h3>
+		<input type="hidden" id="editContactId" />
+		<input type="text" id="editFirstName" placeholder="First Name" style="width:100%; margin:5px 0; padding:8px;" />
+		<input type="text" id="editLastName" placeholder="Last Name" style="width:100%; margin:5px 0; padding:8px;" />
+		<input type="text" id="editEmail" placeholder="Email" style="width:100%; margin:5px 0; padding:8px;" />
+		<input type="text" id="editPhone" placeholder="Phone" style="width:100%; margin:5px 0; padding:8px;" />
+		<div style="margin-top:15px;">
+			<button onclick="updateContact()" style="margin-right:10px;">Update</button>
+			<button onclick="hideEditContactModal()">Cancel</button>
+		</div>
+		<div id="editContactStatus" style="margin-top:10px;"></div>
+	</div>
 </div>
 
 </body>

@@ -304,13 +304,16 @@ function renderContacts(list)
 	}
 
 	var html = '<table style="width:100%;border-collapse:separate;border-spacing:0 8px;">' +
-		'<thead><tr><th style="text-align:left;">Name</th><th style="text-align:left;">Email</th><th style="text-align:left;">Phone</th></tr></thead><tbody>';
+		'<thead><tr><th style="text-align:left;">Name</th><th style="text-align:left;">Email</th><th style="text-align:left;">Phone</th><th style="text-align:left;">Actions</th></tr></thead><tbody>';
 	for (var i = 0; i < list.length; i++)
 	{
 		var c = list[i];
-		html += '<tr style="background:rgba(0,0,0,0.5);"><td style="padding:10px 12px;">' + c.name + '</td>' +
+		// Handle both old mock structure (c.name) and new API structure (c.firstName + c.lastName)
+		var fullName = c.name || (c.firstName + ' ' + c.lastName);
+		html += '<tr style="background:rgba(0,0,0,0.5);"><td style="padding:10px 12px;">' + fullName + '</td>' +
 			'<td style="padding:10px 12px;">' + c.email + '</td>' +
-			'<td style="padding:10px 12px;">' + c.phone + '</td></tr>';
+			'<td style="padding:10px 12px;">' + c.phone + '</td>' +
+			'<td style="padding:10px 12px;"><button onclick="editContact(' + c.id + ')" style="margin-right:5px;">Edit</button><button onclick="deleteContact(' + c.id + ')">Delete</button></td></tr>';
 	}
 	html += '</tbody></table>';
 	container.innerHTML = html;
@@ -352,4 +355,134 @@ function triggerContactsSearch()
 	setTimeout(function(){
 		renderContacts(filtered);
 	}, 200);
+}
+
+// -------------------- Contact Management Functions --------------------
+
+function showAddContactModal() {
+	document.getElementById('addContactModal').style.display = 'block';
+	document.getElementById('addContactStatus').innerHTML = '';
+}
+
+function hideAddContactModal() {
+	document.getElementById('addContactModal').style.display = 'none';
+	// Clear form
+	document.getElementById('addFirstName').value = '';
+	document.getElementById('addLastName').value = '';
+	document.getElementById('addEmail').value = '';
+	document.getElementById('addPhone').value = '';
+}
+
+function addContact() {
+	const firstName = document.getElementById('addFirstName').value.trim();
+	const lastName = document.getElementById('addLastName').value.trim();
+	const email = document.getElementById('addEmail').value.trim();
+	const phone = document.getElementById('addPhone').value.trim();
+	const statusEl = document.getElementById('addContactStatus');
+
+	if (!firstName || !lastName || !email || !phone) {
+		statusEl.innerHTML = 'All fields are required';
+		statusEl.style.color = '#b00020';
+		return;
+	}
+
+	// Add to mock data
+	var newId = Math.max(...mockContacts.map(c => c.id)) + 1;
+	mockContacts.push({
+		id: newId,
+		name: firstName + ' ' + lastName,
+		email: email,
+		phone: phone
+	});
+	
+	statusEl.innerHTML = 'Contact added successfully!';
+	statusEl.style.color = '#2e7d32';
+	
+	setTimeout(() => {
+		hideAddContactModal();
+		triggerContactsSearch(); // Refresh the list
+	}, 1500);
+}
+
+function editContact(contactId) {
+	// Find the contact in mock data
+	var contact = mockContacts.find(c => c.id == contactId);
+	if (!contact) {
+		alert('Contact not found');
+		return;
+	}
+	
+	// Populate the edit modal with current data
+	document.getElementById('editContactId').value = contact.id;
+	document.getElementById('editFirstName').value = contact.name.split(' ')[0] || '';
+	document.getElementById('editLastName').value = contact.name.split(' ')[1] || '';
+	document.getElementById('editEmail').value = contact.email || '';
+	document.getElementById('editPhone').value = contact.phone || '';
+	
+	// Show the modal
+	document.getElementById('editContactModal').style.display = 'block';
+	document.getElementById('editContactStatus').innerHTML = '';
+}
+
+function hideEditContactModal() {
+	document.getElementById('editContactModal').style.display = 'none';
+	// Clear form
+	document.getElementById('editContactId').value = '';
+	document.getElementById('editFirstName').value = '';
+	document.getElementById('editLastName').value = '';
+	document.getElementById('editEmail').value = '';
+	document.getElementById('editPhone').value = '';
+}
+
+function updateContact() {
+	const contactId = document.getElementById('editContactId').value;
+	const firstName = document.getElementById('editFirstName').value.trim();
+	const lastName = document.getElementById('editLastName').value.trim();
+	const email = document.getElementById('editEmail').value.trim();
+	const phone = document.getElementById('editPhone').value.trim();
+	const statusEl = document.getElementById('editContactStatus');
+
+	if (!firstName || !lastName || !email || !phone) {
+		statusEl.innerHTML = 'All fields are required';
+		statusEl.style.color = '#b00020';
+		return;
+	}
+
+	// Update the mock contact
+	var contactIndex = mockContacts.findIndex(c => c.id == contactId);
+	if (contactIndex !== -1) {
+		mockContacts[contactIndex] = {
+			id: parseInt(contactId),
+			name: firstName + ' ' + lastName,
+			email: email,
+			phone: phone
+		};
+		
+		statusEl.innerHTML = 'Contact updated successfully!';
+		statusEl.style.color = '#2e7d32';
+		
+		setTimeout(() => {
+			hideEditContactModal();
+			triggerContactsSearch(); // Refresh the list
+		}, 1500);
+	} else {
+		statusEl.innerHTML = 'Contact not found';
+		statusEl.style.color = '#b00020';
+	}
+}
+
+function deleteContact(contactId) {
+	if (!confirm('Are you sure you want to delete this contact?')) {
+		return;
+	}
+
+	// Remove from mock data
+	var contactIndex = mockContacts.findIndex(c => c.id == contactId);
+	if (contactIndex !== -1) {
+		mockContacts.splice(contactIndex, 1);
+		alert('Contact deleted successfully!');
+		triggerContactsSearch(); // Refresh the list
+	} else {
+		alert('Contact not found');
+	}
 }

@@ -60,6 +60,15 @@ body {
     opacity: 80%;
 }
 
+.alert{
+    background: #ffe7e7;
+    color: #b00020;
+    padding: 10px;
+    margin: 10px 5%;
+    border-radius: 8px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
 #loginName
 {
 	font-size: 28px;

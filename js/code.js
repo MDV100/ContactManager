@@ -1,4 +1,4 @@
-const urlBase = 'http://michaeldvogt.com/LAMPAPI';
+const urlBase = 'http://localhost:8000/LAMPAPI'; // Change to localhost for frontend testing
 const extension = 'php';
 
 let userId = 0;
@@ -79,12 +79,23 @@ function doLogin()
 	
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
-//	var hash = md5( password );
 	
 	document.getElementById("loginResult").innerHTML = "";
 
+	// For local frontend testing - mock the response
+	if (urlBase.includes('localhost') || urlBase.includes('127.0.0.1')) {
+		// Mock successful login for testing
+		setTimeout(() => {
+			userId = 1;
+			firstName = "Test";
+			lastName = "User";
+			saveCookie();
+			window.location.href = "contacts.html";
+		}, 500);
+		return;
+	}
+
 	let tmp = {login:login,password:password};
-//	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + '/Login.' + extension;
@@ -112,7 +123,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "color.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -179,7 +190,7 @@ function addColor()
 	let newColor = document.getElementById("colorText").value;
 	document.getElementById("colorAddResult").innerHTML = "";
 
-	let tmp = {color:newColor,userId,userId};
+	let tmp = {color:newColor,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + '/AddColor.' + extension;
@@ -248,4 +259,88 @@ function searchColor()
 		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 	
+}
+
+// -------------------- Contacts Page (frontend-only mock) --------------------
+
+function debounce(func, wait)
+{
+	let timeoutId;
+	return function() {
+		const context = this;
+		const args = arguments;
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(function() { func.apply(context, args); }, wait);
+	};
+}
+
+const mockContacts = [
+	{ id: 1, name: "Ada Lovelace", email: "ada@algorithms.io", phone: "555-1010" },
+	{ id: 2, name: "Alan Turing", email: "alan@computing.org", phone: "555-2020" },
+	{ id: 3, name: "Grace Hopper", email: "grace@navy.mil", phone: "555-3030" },
+	{ id: 4, name: "Margaret Hamilton", email: "margaret@apollo.nasa", phone: "555-4040" }
+];
+
+function renderContacts(list)
+{
+	var container = document.getElementById('contactsList');
+	var status = document.getElementById('contactsStatus');
+	if (!container) { return; }
+
+	if (!list || list.length === 0)
+	{
+		container.innerHTML = '<div style="text-align:center;">No contacts found.</div>';
+		if (status) { status.style.display = 'none'; }
+		return;
+	}
+
+	var html = '<table style="width:100%;border-collapse:separate;border-spacing:0 8px;">' +
+		'<thead><tr><th style="text-align:left;">Name</th><th style="text-align:left;">Email</th><th style="text-align:left;">Phone</th></tr></thead><tbody>';
+	for (var i = 0; i < list.length; i++)
+	{
+		var c = list[i];
+		html += '<tr style="background:rgba(0,0,0,0.5);"><td style="padding:10px 12px;">' + c.name + '</td>' +
+			'<td style="padding:10px 12px;">' + c.email + '</td>' +
+			'<td style="padding:10px 12px;">' + c.phone + '</td></tr>';
+	}
+	html += '</tbody></table>';
+	container.innerHTML = html;
+	if (status) { status.style.display = 'none'; }
+}
+
+function initContactsPage()
+{
+	var input = document.getElementById('contactSearch');
+	var status = document.getElementById('contactsStatus');
+	if (status) { status.style.display = 'none'; }
+	renderContacts(mockContacts);
+
+	if (input)
+	{
+		var handler = debounce(function() {
+			triggerContactsSearch();
+		}, 300);
+		input.addEventListener('input', handler);
+	}
+}
+
+function triggerContactsSearch()
+{
+	var input = document.getElementById('contactSearch');
+	var status = document.getElementById('contactsStatus');
+	if (!input) { return; }
+
+	var term = input.value.trim().toLowerCase();
+	if (status) { status.innerHTML = 'Searching...'; status.style.display = 'block'; }
+
+	// Mock search locally for frontend iteration
+	var filtered = mockContacts.filter(function(c){
+		return c.name.toLowerCase().indexOf(term) !== -1 ||
+			c.email.toLowerCase().indexOf(term) !== -1 ||
+			c.phone.toLowerCase().indexOf(term) !== -1;
+	});
+
+	setTimeout(function(){
+		renderContacts(filtered);
+	}, 200);
 }

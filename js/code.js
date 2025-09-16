@@ -340,7 +340,7 @@ function triggerContactsSearch()
 	if (!input) { return; }
 
 	var term = input.value.trim().toLowerCase();
-	if (status) { status.innerHTML = 'Searching...'; status.style.display = 'block'; }
+	if (status) { status.style.display = 'none'; }
 
 	// Mock search locally for frontend iteration
 	var filtered = mockContacts.filter(function(c){

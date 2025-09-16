@@ -14,12 +14,25 @@
 	} 
 	else
 	{
-    	$stmt = $conn->prepare("INSERT INTO Contacts (UserID, FirstName, LastName, Phone, Email) VALUES (?, ?, ?, ?, ?)");
-		$stmt->bind_param("sssss", $userId, $firstName, $lastName, $phone, $email);
-		$stmt->execute();
-		$stmt->close();
-		$conn->close();
-		returnWithError("");
+		$checkStmt = $conn->prepare("SELECT ID FROM Contacts WHERE UserID=? AND Phone=?");
+		$checkStmt->bind_param("ss", $userId, $phone);
+		$checkStmt->execute();
+		$result = $checkStmt->get_result();
+		$checkStmt->close();
+
+		
+		if ($result->num_rows > 0) {
+			$conn->close();
+    		returnWithError("Phone number already exists for this user.");
+		}
+		else{
+			$stmt = $conn->prepare("INSERT INTO Contacts (UserID, FirstName, LastName, Phone, Email) VALUES (?, ?, ?, ?, ?)");
+			$stmt->bind_param("sssss", $userId, $firstName, $lastName, $phone, $email);
+			$stmt->execute();
+			$stmt->close();
+			$conn->close();
+			returnWithError("");
+		}
 	}
 
 	function getRequestInfo()

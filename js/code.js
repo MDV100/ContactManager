@@ -1,4 +1,4 @@
-const urlBase = 'http://michaeldvogt.com/LAMPAPI';
+const urlBase = 'http://159.65.40.143/LAMPAPI';
 const extension = 'php';
 
 let userId = 0;
@@ -50,18 +50,12 @@ async function validateAndRegister() {
 
     if (!allFilled) return;
 
-    const name = document.getElementById('login').value.trim();
-    const email = document.getElementById('password').value.trim();
-    const phone = document.getElementById('firstName').value.trim();
-    const password = document.getElementById('lastName').value.trim();
-    const creationDate = new Date().toISOString();
+	const login = document.getElementById('login').value.trim();
+	const password = document.getElementById('password').value.trim();
+	const firstName = document.getElementById('firstName').value.trim();
+	const lastName = document.getElementById('lastName').value.trim();
 
-    const userData = {
-		login: name,
-		password: email,
-		firstName: phone,
-		lastName: password
-	};
+	const userData = { login, password, firstName, lastName };
     const jsonPayload = JSON.stringify(userData);
 
     const url = urlBase + '/Register.' + extension;
@@ -76,7 +70,12 @@ async function validateAndRegister() {
         if (response.ok) {
             window.location.href = 'login.html';
         }
+ 		else {
+            alert("Error");
+            return;
+        }
     } catch (err) {
+		//respond with error message
     }
 }
 

@@ -8,7 +8,7 @@
 	$userId    = $inData["userId"];
     $contactID = $inData["ID"];
 
-	$conn = new mysqli("localhost", "vogt", "password", "ContactManager");
+	$conn = new mysqli("localhost", "lampapi", "password", "ContactManager");
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );

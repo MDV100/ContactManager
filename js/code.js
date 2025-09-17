@@ -75,7 +75,6 @@ async function validateAndRegister() {
             return;
         }
     } catch (err) {
-		//respond with error message
     }
 }
 

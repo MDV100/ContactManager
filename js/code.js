@@ -1,4 +1,4 @@
-const urlBase = 'http://michaeldvogt.com/LAMPAPI';
+const urlBase = 'http://159.65.40.143/LAMPAPI';
 const extension = 'php';
 
 let userId = 0;
@@ -119,7 +119,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "color.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);

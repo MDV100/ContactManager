@@ -68,7 +68,7 @@ async function validateAndRegister() {
         });
 
         if (response.ok) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
  		else {
             alert("Error");

@@ -5,6 +5,79 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+document.addEventListener('DOMContentLoaded', function() {
+  const addContactBtn = document.getElementById('addContactsButton');
+  const addContactRow = document.getElementById('add-contact-row');
+  const contactsTableBody = document.querySelector('#add-contact-row tbody');
+
+  
+
+  addContactBtn.addEventListener('click', function() {
+    // Create the new table row element
+	if(!document.getElementById('submitNewContactButton'))
+	{
+
+		
+		const newRow = document.createElement('tr');
+		addContactRow.style.display = 'inline';
+
+		// Define the inner HTML for the new row with input fields
+		newRow.innerHTML = `
+		<td><input type="text" id = firstNameField name="first_name[]" placeholder="First Name"></td>
+		<td><input type="text" id= lastNameField name="last_name[]" placeholder="Last Name"></td>
+		<td><input type="email" id = emailField name="email[]" placeholder="Email"></td>
+		<td><input type="tel" id = phoneField name="phone_number[]" placeholder="Phone Number"></td>
+		<button type = "button" id = "submitNewContactButton" class="buttons"> Submit </button>
+		`;
+
+		// Append the new row to the table body
+		contactsTableBody.appendChild(newRow);
+		const submitButton = document.getElementById('submitNewContactButton');
+		submitButton.addEventListener('click', function() {
+			console.log("TEST TEST")
+			addContact(firstNameField.value, lastNameField.value, emailField.value, phoneField.value)
+			submitButton.remove()
+		})
+
+	}
+  });
+});
+
+async function addContact(firstName, lastName, email, phone)
+{
+    const fields = [
+		'userId',
+        'firstName',
+        'lastName',
+        'email',
+        'phone'
+    ];
+	console.log(userId)
+	console.log("THIS IS A TEST")
+	const userData = { firstName, lastName, email, phone, userId };
+    const jsonPayload = JSON.stringify(userData);
+
+    const url = urlBase + '/AddContact.' + extension;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonPayload
+        });
+
+        if (response.ok) {
+            console.log("Contact Succesfully Added")
+        }
+ 		else {
+            console.log("Error adding contact")
+            return;
+        }
+    } catch (err) {
+    }
+}
+
+
 function validateLoginFields() {
     let valid = true;
     const nameInput = document.getElementById('loginName');

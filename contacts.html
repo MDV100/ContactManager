@@ -30,10 +30,27 @@
 	<div id="searchRow">
 		<input type="text" id="contactSearch" placeholder="Search contacts by name, email, phone" />
 	</div>
+	<div id="add-contact-row" class="add-contact-row" style="display:none;">	
+		<table>
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email</th>
+					<th>Phone Number</th>
+				</tr>
+			</thead>
+			<tbody>
+				</tbody>
+			</tbody>
+		</table>
+	</div>
 	<div class="button-row">
 		<button type="button" id="searchBtn" class="buttons" onclick="triggerContactsSearch();"> Search </button>
+		<button type="button" id="addContactsButton" class="buttons"> Add Contact</button>
 		<button type="button" id="logoutButton" class="buttons" onclick="doLogout();"> Log Out </button>
 	</div>
+
 </div>
 
 </body>

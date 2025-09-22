@@ -1,11 +1,4 @@
 <?php
-    // This header allows all domains to access your script.
-    // It is a security risk in production, so replace "*" with your frontend domain.
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: PUT, GET, POST, OPTIONS");
-    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-    // Set the content type header to JSON
-    header("Content-Type: application/json; charset=UTF-8");
 
     $inData = getRequestInfo();
 
@@ -13,14 +6,14 @@
     $firstName = "";
     $lastName = "";
 
-    $conn = new mysqli("localhost", "vogt", "password", "ContactManager");
+    $conn = new mysqli("localhost", "lampapi", "password", "ContactManager");
     if( $conn->connect_error )
     {
         returnWithError( $conn->connect_error );
     }
     else
     {
-        $stmt = $conn->prepare("SELECT ID,firstName,lastName FROM Users WHERE Login=? AND Password =?");
+        $stmt = $conn->prepare("SELECT ID,FirstName,LastName FROM Users WHERE Login=? AND Password =?");
         $stmt->bind_param("ss", $inData["login"], $inData["password"]);
         $stmt->execute();
         $result = $stmt->get_result();

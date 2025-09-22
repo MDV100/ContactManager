@@ -1,13 +1,7 @@
 <?php
-    // --- Headers ---
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: PUT, GET, POST, OPTIONS");
-    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-    header("Content-Type: application/json; charset=UTF-8");
-
     $inData = getRequestInfo();
 
-    $conn = new mysqli("localhost", "vogt", "password", "ContactManager");
+    $conn = new mysqli("localhost", "lampapi", "password", "ContactManager");
 
     if( $conn->connect_error )
     {

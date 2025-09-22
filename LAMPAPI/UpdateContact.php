@@ -8,15 +8,15 @@
 	$userId    = $inData["userId"];
     $contactID = $inData["ID"];
 
-	$conn = new mysqli("localhost", "vogt", "password", "ContactManager");
+	$conn = new mysqli("localhost", "lampapi", "password", "ContactManager");
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
 	} 
 	else
 	{
-    	$stmt = $conn->prepare("UPDATE Contacts SET UserID=?, FirstName=?, LastName=?, Phone=?, Email=? WHERE ID=?;");
-		$stmt->bind_param("ssssss", $userId, $firstName, $lastName, $phone, $email, $contactID);
+    	$stmt = $conn->prepare("UPDATE Contacts SET FirstName=?, LastName=?, Phone=?, Email=? WHERE ID=? AND UserID=?");
+		$stmt->bind_param("ssssss", $firstName, $lastName, $phone, $email, $contactID, $userId);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
@@ -39,5 +39,4 @@
 		$retValue = '{"error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
-	
 ?>

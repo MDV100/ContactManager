@@ -78,10 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
 						lastNameCell.dataset.field = 'lastName';
 						lastNameCell.textContent = contact.lastName;
 
-						const fullNameCell = document.createElement('td');
-						fullNameCell.dataset.field = 'fullName';
-						fullNameCell.textContent = contact.fullName;
-
 						const phoneCell = document.createElement('td');
             			phoneCell.dataset.field = 'phone';
             			phoneCell.textContent = contact.phone;
@@ -96,7 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
             			editButton.classList.add('edit-btn');
             			actionCell.appendChild(editButton);
 
-						row.appendChild(fullNameCell);
+						row.appendChild(firstNameCell);
+						row.appendChild(lastNameCell);
             			row.appendChild(phoneCell);
             			row.appendChild(emailCell);
             			row.appendChild(actionCell);
@@ -151,21 +148,30 @@ function saveChanges(row) {
 	const contactId = row.dataset.id;
 	const cells = row.querySelectorAll('td[data-field]');
 
-	const updatedData = {};
+	firstName = "";
+	lastName = "";
+	phone = "";
+	email = "";
 	cells.forEach(cell => {
 		const input = cell.querySelector('input');
 		if(input) {
+			if (input.name == "firstName") firstName = input.value;
+			else if (input.name == "lastName") lastName = input.value;
+			else if (input.name == "phone") phone = input.value;
+			else if (input.name == "email") email = input.value;
 
-			updatedData[input.name] = input.value;
-			
 		}
 	})
 
 	const payload = {
+		firstName: firstName,
+		lastName: lastName,
+		phone: phone,
+		email: email,
 		userId: userId,
-		id: contactId,
-		...updatedData
+		ID: contactId,
 	}
+	console.log(payload)
 
 	console.log("Updating contact...");
 	let url = urlBase + '/UpdateContact.' + extension;
@@ -178,6 +184,7 @@ function saveChanges(row) {
 	})
 	.then(response => {
 		console.log("Received response from server")
+		return response.json();
 	})
 	.then(data => {
 		if(data.error) {
@@ -190,14 +197,14 @@ function saveChanges(row) {
 				}
 			})
 
-			saveButton.textContent = 'Edit';
-			saveButton.classList.remove('save-btn');
-			saveButton.classList.add('edit-btn');
 		}
 	})
 	.catch(error => {
 		console.log("Fetch error")
 	})
+	saveButton.textContent = 'Edit';
+	saveButton.classList.remove('save-btn');
+	saveButton.classList.add('edit-btn');
 }
 
 

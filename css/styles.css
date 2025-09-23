@@ -265,3 +265,7 @@ select{
     font-family: 'Ubuntu', sans-serif;
     padding: 8px 0;
 }
+
+#add-contact-row td {
+    padding: 10px;
+}

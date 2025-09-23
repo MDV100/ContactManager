@@ -269,3 +269,9 @@ select{
 #add-contact-row td {
     padding: 10px;
 }
+
+#add-contact-row {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 5px;
+}

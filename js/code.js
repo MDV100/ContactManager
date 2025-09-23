@@ -92,11 +92,18 @@ document.addEventListener('DOMContentLoaded', function() {
             			editButton.classList.add('edit-btn');
             			actionCell.appendChild(editButton);
 
+						const actionCell2 = document.createElement('td');
+						const deleteButton = document.createElement('button');
+						deleteButton.textContent = 'Delete';
+						deleteButton.classList.add('delete-btn');
+						actionCell2.appendChild(deleteButton);
+
 						row.appendChild(firstNameCell);
 						row.appendChild(lastNameCell);
             			row.appendChild(phoneCell);
             			row.appendChild(emailCell);
             			row.appendChild(actionCell);
+						row.appendChild(actionCell2);
 
 						resultsContainer.appendChild(row);
 						resultsContainer.style = 'inline'
@@ -111,6 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
 					else if (e.target.classList.contains('save-btn')) {
 						const row = e.target.closest('tr');
 						saveChanges(row)
+					}
+					else if(e.target.classList.contains('delete-btn')) {
+						const row = e.target.closest('tr');
+						deleteContact(row);
 					}
 				})
 			})
@@ -141,6 +152,39 @@ function toggleEditMode(row) {
 	editButton.textContent = 'Save';
 	editButton.classList.remove('edit-btn');
     editButton.classList.add('save-btn');
+}
+
+function deleteContact(row) {
+	const contactId = row.dataset.id;
+	const cells = row.querySelectorAll('td[data-field]');
+
+	const payload = {
+		userId: userId,
+		ID: contactId,
+	}
+
+	console.log("Removing contact...");
+	let url = urlBase + '/RemoveContact.' + extension;
+	fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(payload)
+	})
+	.then(response => {
+		console.log("Received response from server")
+		return response.json();
+	})
+	.then(data => {
+		if(data.error) {
+			console.log("API Error")
+		}
+	})
+	.catch(error => {
+		console.log("Fetch error")
+	})
+	row.remove();
 }
 
 function saveChanges(row) {

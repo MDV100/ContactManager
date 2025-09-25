@@ -43,6 +43,7 @@ async function addContactStarter()
 			submitButton.remove();
 			emailField.remove();
 			phoneField.remove();
+			search.click();
 		})
 	}
 	

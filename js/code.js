@@ -98,13 +98,13 @@ async function search()
 					const actionCell = document.createElement('td');
 					const editButton = document.createElement('button');
 					editButton.textContent = 'Edit';
-					editButton.classList.add('edit-btn');
+					editButton.classList.add('edit-btn', 'buttons');
 					actionCell.appendChild(editButton);
 
 					const actionCell2 = document.createElement('td');
 					const deleteButton = document.createElement('button');
 					deleteButton.textContent = 'Delete';
-					deleteButton.classList.add('delete-btn');
+					deleteButton.classList.add('delete-btn', 'buttons');
 					actionCell2.appendChild(deleteButton);
 
 					row.appendChild(firstNameCell);

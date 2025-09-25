@@ -5,133 +5,142 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
-document.addEventListener('DOMContentLoaded', function() {
-  	const addContactBtn = document.getElementById('addContactsButton');
-  	const addContactRow = document.getElementById('add-contact-row');
-  	const contactsTableBody = document.querySelector('#add-contact-row tbody');
-	const searchButton = document.getElementById('searchBtn');
-  
-	//add contact and other necessary items
-	addContactBtn.addEventListener('click', function() {
-		if(!document.getElementById('submitNewContactButton'))
-		{
+const addContactBtn = document.getElementById('addContactsButton');
+const addContactRow = document.getElementById('add-contact-row');
+const contactsTableBody = document.querySelector('#add-contact-row tbody');
+const searchButton = document.getElementById('searchBtn');
+const submitButton = document.getElementById('submitButton');
 
-			const newRow = document.createElement('tr');
-			addContactRow.style.display = 'inline';
 
-			newRow.innerHTML = `
-			<td><input type="text" id = firstNameField name="first_name[]" placeholder="First Name"></td>
-			<td><input type="text" id= lastNameField name="last_name[]" placeholder="Last Name"></td>
-			<td><input type="email" id = emailField name="email[]" placeholder="Email"></td>
-			<td><input type="tel" id = phoneField name="phone_number[]" placeholder="Phone Number"></td>
-			<button type = "button" id = "submitNewContactButton" class="buttons"> Submit </button>
-			`;
+async function addContactStarter()
+{
+	if(!document.getElementById('submitNewContactButton'))
+	{
+		const addContactRow = document.getElementById('add-contact-row');
+		const newRow = document.createElement('tr');
+		addContactRow.style.display = 'inline';
 
-			contactsTableBody.appendChild(newRow);
-			const submitButton = document.getElementById('submitNewContactButton');
-			submitButton.addEventListener('click', function() {
-				addContact(firstNameField.value, lastNameField.value, emailField.value, phoneField.value)
-				firstNameField.remove()
-				lastNameField.remove()
-				emailField.remove()
-				phoneField.remove()
-				submitButton.remove()
-				addContactRow.style.display = 'none';
-			})
-		}
-  	});
+		newRow.innerHTML = `
+		<td><input type="text" id = firstNameField name="first_name[]" placeholder="First Name"></td>
+		<td><input type="text" id= lastNameField name="last_name[]" placeholder="Last Name"></td>
+		<td><input type="email" id = emailField name="email[]" placeholder="Email"></td>
+		<td><input type="tel" id = phoneField name="phone_number[]" placeholder="Phone Number"></td>
+		<button type = "button" id = "submitNewContactButton" class="buttons"> Submit </button>
+		`;
 
-	searchButton.addEventListener('click', function() {
-		let srch = document.getElementById("contactSearch").value;
-		document.getElementById("search-results").innerHTML = "";
-		
-		let contactList = "";
+		addContactRow.append(newRow);
+		const submitButton = document.getElementById('submitNewContactButton');
+		const firstNameField = document.getElementById('firstNameField');
+		const lastNameField = document.getElementById('lastNameField');
+		const emailField = document.getElementById('emailField');
+		const phoneField = document.getElementById('phoneField');
 
-		let tmp = {search:srch,userId:userId};
-		let jsonPayload = JSON.stringify( tmp );
 
-		let url = urlBase + '/searchContacts.' + extension;
-		try {
-			fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: jsonPayload,
-			})
-			.then(response => response.json())
-			.then(data => {
-				console.log(data.results)
-				const resultsContainer = document.getElementById('add-contact-row');
-				resultsContainer.innerHTML = '';
-				
-				if(data.results && data.results.length > 0) {
-					data.results.forEach(contact => {
-						const row = document.createElement('tr');
-						row.dataset.id = contact.ID;
+		submitButton.addEventListener('click', function() {
+			addContact(firstNameField.value, lastNameField.value, emailField.value, phoneField.value);
+			firstNameField.remove();
+			lastNameField.remove();
+			submitButton.remove();
+			emailField.remove();
+			phoneField.remove();
+		})
+	}
+	
 
-						const firstNameCell = document.createElement('td');
-						firstNameCell.dataset.field = 'firstName';
-						firstNameCell.textContent = contact.firstName;
+}
 
-						const lastNameCell = document.createElement('td');
-						lastNameCell.dataset.field = 'lastName';
-						lastNameCell.textContent = contact.lastName;
+async function search()
+{
+	let srch = document.getElementById("contactSearch").value;
+	document.getElementById("search-results").innerHTML = "";
+	
+	let contactList = "";
 
-						const phoneCell = document.createElement('td');
-            			phoneCell.dataset.field = 'phone';
-            			phoneCell.textContent = contact.phone;
+	let tmp = {search:srch,userId:userId};
+	let jsonPayload = JSON.stringify( tmp );
 
-						const emailCell = document.createElement('td');
-            			emailCell.dataset.field = 'email';
-            			emailCell.textContent = contact.email;
+	let url = urlBase + '/searchContacts.' + extension;
+	try {
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: jsonPayload,
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.results)
+			const resultsContainer = document.getElementById('add-contact-row');
+			resultsContainer.innerHTML = '';
+			
+			if(data.results && data.results.length > 0) {
+				data.results.forEach(contact => {
+					const row = document.createElement('tr');
+					row.dataset.id = contact.ID;
 
-						const actionCell = document.createElement('td');
-            			const editButton = document.createElement('button');
-            			editButton.textContent = 'Edit';
-            			editButton.classList.add('edit-btn');
-            			actionCell.appendChild(editButton);
+					const firstNameCell = document.createElement('td');
+					firstNameCell.dataset.field = 'firstName';
+					firstNameCell.textContent = contact.firstName;
 
-						const actionCell2 = document.createElement('td');
-						const deleteButton = document.createElement('button');
-						deleteButton.textContent = 'Delete';
-						deleteButton.classList.add('delete-btn');
-						actionCell2.appendChild(deleteButton);
+					const lastNameCell = document.createElement('td');
+					lastNameCell.dataset.field = 'lastName';
+					lastNameCell.textContent = contact.lastName;
 
-						row.appendChild(firstNameCell);
-						row.appendChild(lastNameCell);
-            			row.appendChild(phoneCell);
-            			row.appendChild(emailCell);
-            			row.appendChild(actionCell);
-						row.appendChild(actionCell2);
+					const phoneCell = document.createElement('td');
+					phoneCell.dataset.field = 'phone';
+					phoneCell.textContent = contact.phone;
 
-						resultsContainer.appendChild(row);
-						resultsContainer.style = 'inline'
-					})
-				}
+					const emailCell = document.createElement('td');
+					emailCell.dataset.field = 'email';
+					emailCell.textContent = contact.email;
 
-				resultsContainer.addEventListener('click', (e) => {
-					if(e.target.classList.contains('edit-btn')) {
-						const row = e.target.closest('tr');
-						toggleEditMode(row);
-					}
-					else if (e.target.classList.contains('save-btn')) {
-						const row = e.target.closest('tr');
-						saveChanges(row)
-					}
-					else if(e.target.classList.contains('delete-btn')) {
-						const row = e.target.closest('tr');
-						deleteContact(row);
-					}
+					const actionCell = document.createElement('td');
+					const editButton = document.createElement('button');
+					editButton.textContent = 'Edit';
+					editButton.classList.add('edit-btn');
+					actionCell.appendChild(editButton);
+
+					const actionCell2 = document.createElement('td');
+					const deleteButton = document.createElement('button');
+					deleteButton.textContent = 'Delete';
+					deleteButton.classList.add('delete-btn');
+					actionCell2.appendChild(deleteButton);
+
+					row.appendChild(firstNameCell);
+					row.appendChild(lastNameCell);
+					row.appendChild(phoneCell);
+					row.appendChild(emailCell);
+					row.appendChild(actionCell);
+					row.appendChild(actionCell2);
+
+					resultsContainer.appendChild(row);
+					resultsContainer.style = 'inline'
 				})
+			}
+
+			resultsContainer.addEventListener('click', (e) => {
+				if(e.target.classList.contains('edit-btn')) {
+					const row = e.target.closest('tr');
+					toggleEditMode(row);
+				}
+				else if (e.target.classList.contains('save-btn')) {
+					const row = e.target.closest('tr');
+					saveChanges(row)
+				}
+				else if(e.target.classList.contains('delete-btn')) {
+					const row = e.target.closest('tr');
+					deleteContact(row);
+				}
 			})
-		}
-		catch(err)
-		{
-			document.getElementById("search-results").innerHTML = err.message;
-		}
-	})
-});
+		})
+	}
+	catch(err)
+	{
+		document.getElementById("search-results").innerHTML = err.message;
+	}
+}
+
 function toggleEditMode(row) {
 	const cells = row.querySelectorAll('td[data-field]');
 	const editButton = row.querySelector('.edit-btn')
@@ -285,6 +294,7 @@ async function addContact(firstName, lastName, email, phone)
         }
     } catch (err) {
     }
+	search();
 }
 
 

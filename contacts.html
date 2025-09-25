@@ -9,6 +9,7 @@
 	document.addEventListener('DOMContentLoaded', function() 
 	{
 		readCookie();
+		search();
 		initContactsPage();
 	}, false);
 	</script>
@@ -51,8 +52,8 @@
 	</div>
 	<p id = "search-display"></p>
 	<div class="button-row">
-		<button type="button" id="searchBtn" class="buttons"> Search </button>
-		<button type="button" id="addContactsButton" class="buttons"> Add Contact</button>
+		<button type="button" id="searchBtn" class="buttons" onclick="search();"> Search </button>
+		<button type="button" id="addContactsButton" class="buttons" onclick="addContactStarter();"> Add Contact</button>
 		<button type="button" id="logoutButton" class="buttons" onclick="doLogout();"> Log Out </button>
 	</div>
 
